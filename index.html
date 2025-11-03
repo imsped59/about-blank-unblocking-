@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>unblocker thing</title>
+    <style>
+        body {background:#f0f0f0; margin:0; font-family:arial;}
+        h1 {text-align:center; color:#333; font-size:2em; margin:20px;}
+        #box {margin:20px auto; width:90%; background:#fff; padding:15px; border:2px solid #ccc; border-radius:10px;}
+        input {width:65%; padding:12px; font-size:1.2em; border:1px solid #aaa; border-radius:8px;}
+        button {padding:12px 25px; font-size:1.2em; background:#4CAF50; color:white; border:none; border-radius:8px; cursor:pointer;}
+        button:hover {background:#45a049;}
+        iframe {width:100%; height:500px; border:1px solid #ddd; margin-top:15px;}
+        p {font-size:1em; color:#555; margin:10px 0;}
+        #rick {position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999; display:none; background:#000;}
+    </style>
+</head>
+<body>
+<div id="box">
+    <h1>unblocker (kinda works)</h1>
+    <p>put website and hit go. opens in about:blank so it might not get blocked idk</p>
+    <input id="url" placeholder="https://example.com" type="text">
+    <button id="go">go</button>
+    <iframe id="frame"></iframe>
+</div>
+
+<div id="rick">
+    <iframe id="rickvid" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<script>
+    // sometimes if u type certain words it plays a video in a doc thing
+    // its not youtube so no login
+    document.getElementById("url").addEventListener("input", function(){
+        let txt = this.value.toLowerCase();
+        if(txt.includes("rick") || txt.includes("astley")){
+            setTimeout(() => {
+                let rick = document.getElementById("rick");
+                let vid = document.getElementById("rickvid");
+                vid.src = "https://docs.microsoft.com/en-us/shows/docs-whats-new/embedded-video?v=148751763&autoplay=1&loop=1";
+                rick.style.display = "block";
+                document.getElementById("box").style.display = "none";
+            }, 800);
+        }
+    });
+
+    document.getElementById("go").onclick = function() {
+        let site = document.getElementById("url").value.trim();
+        if(!site) {alert("type something"); return;}
+        if(site.toLowerCase().includes("rick")) return;
+        if(!site.startsWith("http")) site = "https://" + site;
+        
+        let f = document.getElementById("frame");
+        f.src = "about:blank";
+        setTimeout(() => {
+            let d = f.contentWindow.document;
+            d.open();
+            d.write('<!DOCTYPE html><html><body style="margin:0"><iframe src="'+site+'" style="width:100%;height:100vh;border:0"></iframe></body></html>');
+            d.close();
+        }, 100);
+    };
+
+    document.getElementById("url").addEventListener("keypress", function(e){
+        if(e.key === "Enter") document.getElementById("go").click();
+    });
+</script>
+</body>
+</html>
